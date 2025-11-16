@@ -14,10 +14,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class TestDeathNote {
 
   private static final String JIM_MORIARTY = "Jim Moriarty";
-  private static final String MURDER = "murder";
+  private static final String MURDERED = "murdered";
   private static final String MYCROFT_HOLMES = "Mycroft Holmes";
   private static final String SHERLOCK_HOLMES = "Sherlock Holmes";
   private static final String DEFAULT_CAUSE = "heart attack";
+  private static final String KARTING_ACCIDENT = "karting accident";
   private static final long INVALID_CAUSE_TIME = 100;
   private static final long INVALID_DETAILS_TIME = 6000 + INVALID_CAUSE_TIME;
 
@@ -78,17 +79,33 @@ class TestDeathNote {
   /*
   4. If the cause of death is written within the next 40 milliseconds of writing the person's name,
     it will happen. 
+    If the cause of death is not specified, the person will simply die of a heart attack.
+      * check that writing a cause of death before writing a name throws the correct exception
+      * write the name of a human in the notebook
+      * verify that the cause of death is a heart attack
+      * write the name of another human in the notebook
+      * set the cause of death to "karting accident"
+      * verify that the cause of death has been set correctly (returned true, and the cause is indeed "karting accident")
+      * sleep for 100ms
+      * try to change the cause of death 
+      * verify that the cause of death has not been changed
   */
   @Test
   void testDeathInTime() throws InterruptedException {
+    final Exception e = assertThrows(IllegalStateException.class, () -> {
+      deathnote.writeDeathCause(MURDERED);
+    });
+    assertNotNull(e.getMessage());
+    assertFalse(e.getMessage().isEmpty());
+    assertFalse(e.getMessage().isBlank());
     deathnote.writeName(MYCROFT_HOLMES);
     assertEquals(DEFAULT_CAUSE, deathnote.getDeathCause(MYCROFT_HOLMES));
     deathnote.writeName(JIM_MORIARTY);
-    assertTrue(deathnote.writeDeathCause(MURDER));
-    assertEquals(MURDER, deathnote.getDeathCause(JIM_MORIARTY));
+    assertTrue(deathnote.writeDeathCause(KARTING_ACCIDENT));
+    assertEquals(KARTING_ACCIDENT, deathnote.getDeathCause(JIM_MORIARTY));
     Thread.sleep(INVALID_CAUSE_TIME);
     assertFalse(deathnote.writeDeathCause("decapitation"));
-    assertEquals(MURDER, deathnote.getDeathCause(JIM_MORIARTY));
+    assertEquals(KARTING_ACCIDENT, deathnote.getDeathCause(JIM_MORIARTY));
   }
 
   /*
