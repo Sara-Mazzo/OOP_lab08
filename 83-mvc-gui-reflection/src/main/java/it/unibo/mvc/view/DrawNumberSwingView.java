@@ -92,7 +92,7 @@ public final class DrawNumberSwingView implements DrawNumberView {
         return showConfirmDialog(frame, question, name, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
     }
 
-    @SuppressFBWarnings("EI2")
+    @SuppressFBWarnings
     @Override
     public void setController(final DrawNumberController observer) {
         this.controller = observer;

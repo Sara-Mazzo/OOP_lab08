@@ -48,10 +48,7 @@ public final class DrawNumberControllerImpl implements DrawNumberController {
         this.model.reset();
     }
 
-    @SuppressFBWarnings(
-        value = "DM_EXIT", 
-        justification = "exit requested by user via GUI quit"
-    )
+    @SuppressFBWarnings
     @Override
     public void quit() {
         /*
